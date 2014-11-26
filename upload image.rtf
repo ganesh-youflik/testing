@@ -1,0 +1,188 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red170\green13\blue145;\red92\green38\blue153;\red0\green116\blue0;
+\red63\green110\blue116;\red46\green13\blue110;\red28\green0\blue207;\red196\green26\blue22;\red38\green71\blue75;
+\red100\green56\blue32;}
+\margl1440\margr1440\vieww17660\viewh15920\viewkind0
+\deftab529
+\pard\tx529\pardeftab529\pardirnatural
+
+\f0\fs22 \cf0 \CocoaLigature0 -(\cf2 void\cf0 )imagePickerController:(\cf3 UIImagePickerController\cf0  *)picker didFinishPickingMediaWithInfo:(\cf3 NSDictionary\cf0  *)info\
+\{\
+    \cf4 // Code here to work with media\cf0 \
+    [\cf5 _selectedImage\cf0  \cf6 removeFromSuperview\cf0 ];\
+    \
+    [\cf2 self\cf0  \cf6 dismissViewControllerAnimated\cf0 :\cf2 YES\cf0  \cf6 completion\cf0 :\cf2 nil\cf0 ];\
+    \
+    \cf2 if\cf0 (\cf5 _uploadType\cf0  == \cf7 1\cf0 ) \{\
+        \
+        \cf6 NSLog\cf0 (\cf8 @"photo"\cf0 );\
+        \
+        \cf3 UIImage\cf0  *image = info[\cf3 UIImagePickerControllerOriginalImage\cf0 ];\
+        \
+        \cf3 UIImage\cf0  *image12 = [\cf2 self\cf0  \cf9 scaleAndRotateImage\cf0 :image];\
+        \
+        \cf3 NSString\cf0  *jpgPath = [\cf6 NSHomeDirectory\cf0 () \cf6 stringByAppendingPathComponent\cf0 :\cf8 @"Documents/Test.jpg"\cf0 ];\
+        [\cf6 UIImageJPEGRepresentation\cf0 (image12, \cf7 1.0\cf0 ) \cf6 writeToFile\cf0 :jpgPath \cf6 atomically\cf0 :\cf2 YES\cf0 ];\
+        \
+        \cf3 UIImage\cf0  *image1 = [\cf3 UIImage\cf0  \cf6 imageWithContentsOfFile\cf0 :jpgPath];\
+        \
+        \cf3 NSData\cf0  *imageData = \cf6 UIImageJPEGRepresentation\cf0 (image1, \cf7 0.2\cf0 );\
+        \
+        \cf3 NSString\cf0  *filePath = [jpgPath \cf6 stringByReplacingOccurrencesOfString\cf0 :\cf8 @" "\cf0  \cf6 withString\cf0 :\cf8 @"%20"\cf0 ];\
+        \
+        [\cf5 _uploadData\cf0  \cf6 setObject\cf0 :filePath \cf6 forKey\cf0 :\cf8 @"filePath"\cf0 ];\
+        [\cf5 _uploadData\cf0  \cf6 setObject\cf0 :imageData \cf6 forKey\cf0 :\cf8 @"uploadData"\cf0 ];\
+        \
+       \cf4 /* _selectedImage = [UIButton buttonWithType:UIButtonTypeCustom];\
+        _selectedImage.frame = CGRectMake(10, _lblCharacterCount.frame.origin.y+30, 70, 70);\
+        [_selectedImage setImage:image1 forState:UIControlStateNormal];\
+        [_messageView addSubview:_selectedImage]; */\cf0 \
+        \
+        \cf5 _selectedImageview\cf0  = [[\cf3 UIImageView\cf0  \cf6 alloc\cf0 ] \cf6 initWithFrame\cf0 :\cf6 CGRectMake\cf0 (\cf7 10\cf0 , \cf5 _lblCharacterCount\cf0 .\cf3 frame\cf0 .\cf3 origin\cf0 .\cf3 y\cf0 +\cf7 30\cf0 , \cf7 70\cf0 , \cf7 70\cf0 )];\
+        \cf5 _selectedImageview\cf0 .\cf3 image\cf0  = image1;\
+        \cf5 _selectedImageview\cf0 .\cf3 userInteractionEnabled\cf0  = \cf2 YES\cf0 ;\
+        [\cf2 self\cf0 .\cf3 view\cf0  \cf6 addSubview\cf0 :\cf5 _selectedImageview\cf0 ];\
+        \
+        \cf5 _imageCloseBtn\cf0  = [\cf3 UIButton\cf0  \cf6 buttonWithType\cf0 :\cf6 UIButtonTypeCustom\cf0 ];\
+        \cf5 _imageCloseBtn\cf0 .\cf3 frame\cf0  = \cf6 CGRectMake\cf0 (\cf7 55\cf0 , -\cf7 15\cf0 , \cf7 30\cf0 , \cf7 30\cf0 );\
+        [\cf5 _imageCloseBtn\cf0  \cf6 setImage\cf0 :[\cf3 UIImage\cf0  \cf6 imageNamed\cf0 :\cf8 @"image_close.png"\cf0 ] \cf6 forState\cf0 :\cf6 UIControlStateNormal\cf0 ];\
+        [\cf5 _imageCloseBtn\cf0  \cf6 addTarget\cf0 :\cf2 self\cf0  \cf6 action\cf0 :\cf2 @selector\cf0 (closeSelectedImage:) \cf6 forControlEvents\cf0 :\cf6 UIControlEventTouchUpInside\cf0 ];\
+        [\cf5 _selectedImageview\cf0  \cf6 addSubview\cf0 :\cf5 _imageCloseBtn\cf0 ];\
+        \
+    \} \cf2 else\cf0  \cf2 if\cf0  (\cf5 _uploadType\cf0  == \cf7 2\cf0 ) \{\
+         \cf6 NSLog\cf0 (\cf8 @"video"\cf0 );\
+        \
+        \cf3 NSURL\cf0  *vurl = info[\cf3 UIImagePickerControllerMediaURL\cf0 ];\
+\
+        \cf3 NSString\cf0  *videoPath = [vurl \cf6 absoluteString\cf0 ];\
+        \
+        \cf3 NSData\cf0  *videoData = [\cf3 NSData\cf0  \cf6 dataWithContentsOfURL\cf0 :vurl];\
+    \
+        \cf3 NSString\cf0  * filePath = [videoPath \cf6 stringByReplacingOccurrencesOfString\cf0 :\cf8 @" "\cf0  \cf6 withString\cf0 :\cf8 @"%20"\cf0 ];\
+        \
+        [\cf5 _uploadData\cf0  \cf6 setObject\cf0 :filePath \cf6 forKey\cf0 :\cf8 @"filePath"\cf0 ];\
+        [\cf5 _uploadData\cf0  \cf6 setObject\cf0 :videoData \cf6 forKey\cf0 :\cf8 @"uploadData"\cf0 ];\
+        \
+        \cf3 MPMoviePlayerController\cf0  *player = [[\cf3 MPMoviePlayerController\cf0  \cf6 alloc\cf0 ] \cf6 initWithContentURL\cf0 :vurl];\
+        \cf3 UIImage\cf0   *thumbnail = [player \cf6 thumbnailImageAtTime\cf0 :\cf7 1.0\cf0  \cf6 timeOption\cf0 :\cf6 MPMovieTimeOptionNearestKeyFrame\cf0 ];\
+        \
+        \cf5 _selectedImage\cf0  = [\cf3 UIButton\cf0  \cf6 buttonWithType\cf0 :\cf6 UIButtonTypeCustom\cf0 ];\
+        \cf5 _selectedImage\cf0 .\cf3 frame\cf0  = \cf6 CGRectMake\cf0 (\cf7 10\cf0 , \cf7 40\cf0 , \cf7 70\cf0 , \cf7 70\cf0 );\
+        [\cf5 _selectedImage\cf0  \cf6 setBackgroundImage\cf0 :thumbnail \cf6 forState\cf0 :\cf6 UIControlStateNormal\cf0 ];\
+        [\cf5 _selectedImage\cf0  \cf6 setImage\cf0 :[\cf3 UIImage\cf0  \cf6 imageNamed\cf0 :\cf8 @"Play_iconn.png"\cf0 ] \cf6 forState\cf0 :\cf6 UIControlStateNormal\cf0 ];\
+        [\cf5 _messageView\cf0  \cf6 addSubview\cf0 :\cf5 _selectedImage\cf0 ];\
+    \}\
+\
+\}\
+\
+\
+- (\cf3 UIImage\cf0  *) scaleAndRotateImage: (\cf3 UIImage\cf0  *)image\
+\{\
+    \cf4 //int kMaxResolution = 320; // Or whatever\cf0 \
+    \
+    \
+    \cf3 CGImageRef\cf0  imgRef = image.\cf3 CGImage\cf0 ;\
+    \
+    \cf3 CGFloat\cf0  width = \cf6 CGImageGetWidth\cf0 (imgRef);\
+    \cf3 CGFloat\cf0  height = \cf6 CGImageGetHeight\cf0 (imgRef);\
+    \
+    \cf3 CGAffineTransform\cf0  transform = \cf3 CGAffineTransformIdentity\cf0 ;\
+    \cf3 CGRect\cf0  bounds = \cf6 CGRectMake\cf0 (\cf7 0\cf0 , \cf7 0\cf0 , width, height);\
+   \cf4 /* if (width > kMaxResolution || height > kMaxResolution)\
+    \{\
+        CGFloat ratio = width/height;\
+        if (ratio > 1) \{\
+            bounds.size.width = kMaxResolution;\
+            bounds.size.height = bounds.size.width / ratio;\
+        \}\
+        else \{\
+            bounds.size.height = kMaxResolution;\
+            bounds.size.width = bounds.size.height * ratio;\
+        \}\
+    \} */\cf0 \
+    \
+    \cf3 CGFloat\cf0  scaleRatio = bounds.\cf3 size\cf0 .\cf3 width\cf0  / width;\
+    \cf3 CGSize\cf0  imageSize = \cf6 CGSizeMake\cf0 (\cf6 CGImageGetWidth\cf0 (imgRef), \cf6 CGImageGetHeight\cf0 (imgRef));\
+    \cf3 CGFloat\cf0  boundHeight;\
+    \cf3 UIImageOrientation\cf0  orient = image.\cf3 imageOrientation\cf0 ;\
+    \cf2 switch\cf0 (orient) \{\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationUp\cf0 : \cf4 //EXIF = 1\cf0 \
+            transform = \cf3 CGAffineTransformIdentity\cf0 ;\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationUpMirrored\cf0 : \cf4 //EXIF = 2\cf0 \
+            transform = \cf6 CGAffineTransformMakeTranslation\cf0 (imageSize.\cf3 width\cf0 , \cf7 0.0\cf0 );\
+            transform = \cf6 CGAffineTransformScale\cf0 (transform, -\cf7 1.0\cf0 , \cf7 1.0\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationDown\cf0 : \cf4 //EXIF = 3\cf0 \
+            transform = \cf6 CGAffineTransformMakeTranslation\cf0 (imageSize.\cf3 width\cf0 , imageSize.\cf3 height\cf0 );\
+            transform = \cf6 CGAffineTransformRotate\cf0 (transform, \cf10 M_PI\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationDownMirrored\cf0 : \cf4 //EXIF = 4\cf0 \
+            transform = \cf6 CGAffineTransformMakeTranslation\cf0 (\cf7 0.0\cf0 , imageSize.\cf3 height\cf0 );\
+            transform = \cf6 CGAffineTransformScale\cf0 (transform, \cf7 1.0\cf0 , -\cf7 1.0\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationLeftMirrored\cf0 : \cf4 //EXIF = 5\cf0 \
+            boundHeight = bounds.\cf3 size\cf0 .\cf3 height\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 height\cf0  = bounds.\cf3 size\cf0 .\cf3 width\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 width\cf0  = boundHeight;\
+            transform = \cf6 CGAffineTransformMakeTranslation\cf0 (imageSize.\cf3 height\cf0 , imageSize.\cf3 width\cf0 );\
+            transform = \cf6 CGAffineTransformScale\cf0 (transform, -\cf7 1.0\cf0 , \cf7 1.0\cf0 );\
+            transform = \cf6 CGAffineTransformRotate\cf0 (transform, \cf7 3.0\cf0  * \cf10 M_PI\cf0  / \cf7 2.0\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationLeft\cf0 : \cf4 //EXIF = 6\cf0 \
+            boundHeight = bounds.\cf3 size\cf0 .\cf3 height\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 height\cf0  = bounds.\cf3 size\cf0 .\cf3 width\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 width\cf0  = boundHeight;\
+            transform = \cf6 CGAffineTransformMakeTranslation\cf0 (\cf7 0.0\cf0 , imageSize.\cf3 width\cf0 );\
+            transform = \cf6 CGAffineTransformRotate\cf0 (transform, \cf7 3.0\cf0  * \cf10 M_PI\cf0  / \cf7 2.0\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationRightMirrored\cf0 : \cf4 //EXIF = 7\cf0 \
+            boundHeight = bounds.\cf3 size\cf0 .\cf3 height\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 height\cf0  = bounds.\cf3 size\cf0 .\cf3 width\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 width\cf0  = boundHeight;\
+            transform = \cf6 CGAffineTransformMakeScale\cf0 (-\cf7 1.0\cf0 , \cf7 1.0\cf0 );\
+            transform = \cf6 CGAffineTransformRotate\cf0 (transform, \cf10 M_PI\cf0  / \cf7 2.0\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 case\cf0  \cf6 UIImageOrientationRight\cf0 : \cf4 //EXIF = 8\cf0 \
+            boundHeight = bounds.\cf3 size\cf0 .\cf3 height\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 height\cf0  = bounds.\cf3 size\cf0 .\cf3 width\cf0 ;\
+            bounds.\cf3 size\cf0 .\cf3 width\cf0  = boundHeight;\
+            transform = \cf6 CGAffineTransformMakeTranslation\cf0 (imageSize.\cf3 height\cf0 , \cf7 0.0\cf0 );\
+            transform = \cf6 CGAffineTransformRotate\cf0 (transform, \cf10 M_PI\cf0  / \cf7 2.0\cf0 );\
+            \cf2 break\cf0 ;\
+            \
+        \cf2 default\cf0 :\
+            [\cf3 NSException\cf0  \cf6 raise\cf0 :\cf3 NSInternalInconsistencyException\cf0  \cf6 format\cf0 :\cf8 @"Invalid image orientation"\cf0 ];\
+    \}\
+    \
+    \cf6 UIGraphicsBeginImageContext\cf0 (bounds.\cf3 size\cf0 );\
+    \
+    \cf3 CGContextRef\cf0  context = \cf6 UIGraphicsGetCurrentContext\cf0 ();\
+    \
+    \cf2 if\cf0  (orient == \cf6 UIImageOrientationRight\cf0  || orient == \cf6 UIImageOrientationLeft\cf0 ) \{\
+        \cf6 CGContextScaleCTM\cf0 (context, -scaleRatio, scaleRatio);\
+        \cf6 CGContextTranslateCTM\cf0 (context, -height, \cf7 0\cf0 );\
+    \}\
+    \cf2 else\cf0  \{\
+        \cf6 CGContextScaleCTM\cf0 (context, scaleRatio, -scaleRatio);\
+        \cf6 CGContextTranslateCTM\cf0 (context, \cf7 0\cf0 , -height);\
+    \}\
+    \
+    \cf6 CGContextConcatCTM\cf0 (context, transform);\
+    \
+    \cf6 CGContextDrawImage\cf0 (\cf6 UIGraphicsGetCurrentContext\cf0 (), \cf6 CGRectMake\cf0 (\cf7 0\cf0 , \cf7 0\cf0 , width, height), imgRef);\
+    \cf3 UIImage\cf0  *imageCopy = \cf6 UIGraphicsGetImageFromCurrentImageContext\cf0 ();\
+    \cf6 UIGraphicsEndImageContext\cf0 ();\
+    \
+    \cf2 return\cf0  imageCopy;\
+\}\
+}
